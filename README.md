@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GitHub Portfolio Analyzer
 
-## Getting Started
+A simple, resume-worthy web app that analyzes any GitHub username and visualizes:
+- Top languages across public repositories
+- Top repositories by stars
+- Total stars and forks
+- Profile quick stats (repos, followers, following)
 
-First, run the development server:
+Built with Next.js App Router, TypeScript, Tailwind CSS, and Chart.js.
 
-```bash
+## Quick start
+
+1) Install and run locally
+
+```
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000 and enter a GitHub username.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+2) Optional: increase GitHub API rate limits
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create a `.env.local` file with a personal access token (no scopes needed) to bump from 60/hr to 5k/hr.
 
-## Learn More
+```
+GITHUB_TOKEN=ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Tech
+- Next.js 15 (App Router) + TypeScript
+- Tailwind CSS 4
+- Chart.js via react-chartjs-2
+- Edge-friendly API route with response caching
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy
+- One-click on Vercel (recommended). Add `GITHUB_TOKEN` as an Environment Variable if desired.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Resume bullet ideas
+- Built a full‑stack Next.js app that ingests GitHub REST data and renders interactive insights (Top Languages, Top Repos, Stars/Forks) with Chart.js.
+- Implemented server-side caching and optional token auth to handle GitHub API rate limits; exposed a typed API route for reuse.
+- Designed a responsive UI with Tailwind; shipped on Vercel with zero‑downtime previews.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## File structure
+- `src/app/page.tsx` – UI and charts
+- `src/app/api/github/route.ts` – API route calling GitHub
+- `src/app/layout.tsx` – global layout and metadata
+- `src/app/globals.css` – Tailwind setup
