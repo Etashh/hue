@@ -1,9 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  // Get hostname of request (e.g. demo.vercel.pub, demo.localhost:3000)
-  const hostname = request.headers.get('host') || 'localhost:3000';
-  
   // Add default username to URL if none exists
   const { pathname, search } = request.nextUrl;
   if (pathname === '/' && !search.includes('u=')) {

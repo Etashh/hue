@@ -2,6 +2,33 @@ import { NextRequest, NextResponse } from "next/server";
 
 const GITHUB_API = "https://api.github.com";
 
+// Type definitions for GitHub API responses
+type GitHubRepo = {
+  name: string;
+  html_url: string;
+  description: string | null;
+  language: string | null;
+  stargazers_count: number;
+  forks_count: number;
+  updated_at: string;
+  fork: boolean;
+};
+
+type GitHubProfile = {
+  login: string;
+  name: string | null;
+  avatar_url: string;
+  bio: string | null;
+  blog: string | null;
+  company: string | null;
+  followers: number;
+  following: number;
+  public_repos: number;
+  html_url: string;
+  location: string | null;
+  twitter_username: string | null;
+};
+
 async function gh(path: string, init?: RequestInit) {
   const base = new Headers(init?.headers);
   base.set("Accept", "application/vnd.github+json");
@@ -29,8 +56,8 @@ export async function GET(req: NextRequest) {
 
   try {
     const [profile, repos] = await Promise.all([
-      gh(`/users/${encodeURIComponent(username)}`),
-      gh(`/users/${encodeURIComponent(username)}/repos?per_page=100&sort=updated`),
+      gh(`/users/${encodeURIComponent(username)}`) as Promise<GitHubProfile>,
+      gh(`/users/${encodeURIComponent(username)}/repos?per_page=100&sort=updated`) as Promise<GitHubRepo[]>,
     ]);
 
     // Compute totals
@@ -38,7 +65,7 @@ export async function GET(req: NextRequest) {
     let totalForks = 0;
     const languageCounts: Record<string, number> = {};
 
-    const reposFiltered = (repos as any[])
+    const reposFiltered = repos
       .filter((r) => !r.fork)
       .map((r) => {
         totalStars += r.stargazers_count || 0;
