@@ -14,12 +14,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "GitHub Portfolio Analyzer",
-  description:
-    "Analyze a GitHub user's top repositories, languages, and community impact.",
-  metadataBase: new URL("https://localhost"),
+  description: "Analyze GitHub profiles, repositories, languages, and community impact.",
+  metadataBase: new URL("https://github-analyzer-etash.vercel.app"),
   openGraph: {
     title: "GitHub Portfolio Analyzer",
-    description: "Analyze GitHub repos, stars, forks, and languages.",
+    description: "Visualize GitHub contributions, languages, and top repos.",
     images: [
       {
         url: "/og.png",
@@ -28,6 +27,11 @@ export const metadata: Metadata = {
         alt: "GitHub Portfolio Analyzer",
       },
     ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "GitHub Portfolio Analyzer",
+    description: "Visualize GitHub contributions, languages, and top repos.",
   },
 };
 
@@ -38,7 +42,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         {children}
       </body>
     </html>

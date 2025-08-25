@@ -13,6 +13,9 @@ import {
   Legend,
 } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
+import GitHubRibbon from "@/components/GitHubRibbon";
+import ShareButtons from "@/components/ShareButtons";
+import { useSearchParams, useRouter } from "next/navigation";
 
 ChartJS.register(CategoryScale, LinearScale, ArcElement, Title, Tooltip, Legend);
 
@@ -45,7 +48,11 @@ type ApiData = {
 };
 
 export default function Home() {
-  const [username, setUsername] = useState<string>("octocat");
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const initialUsername = searchParams.get("u") || "octocat";
+
+  const [username, setUsername] = useState<string>(initialUsername);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<ApiData | null>(null);
@@ -58,6 +65,11 @@ export default function Home() {
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Failed to fetch");
       setData(json);
+
+      // Update URL with the username parameter
+      const params = new URLSearchParams(searchParams);
+      params.set("u", user);
+      router.push(`?${params.toString()}`, { scroll: false });
     } catch (e: any) {
       setError(e.message || "Something went wrong");
       setData(null);
@@ -102,6 +114,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-white text-zinc-900">
+      <GitHubRibbon />
+
       <header className="sticky top-0 z-10 backdrop-blur border-b border-zinc-200 bg-white/60">
         <div className="mx-auto max-w-6xl px-6 py-4 flex items-center gap-4">
           <Image src="/next.svg" alt="Logo" width={120} height={26} className="dark:invert" />
@@ -156,6 +170,9 @@ export default function Home() {
                   <Stat label="Repos" value={data.profile.public_repos} />
                   <Stat label="Followers" value={data.profile.followers} />
                   <Stat label="Following" value={data.profile.following} />
+                </div>
+                <div className="mt-4">
+                  <ShareButtons username={data.profile.login} />
                 </div>
               </div>
 
@@ -226,7 +243,17 @@ export default function Home() {
       </main>
 
       <footer className="border-t border-zinc-200 py-8 text-center text-sm text-zinc-500">
-        Built with Next.js App Router + Tailwind on {new Date().getFullYear()}
+        <div>Built with Next.js App Router + Tailwind on {new Date().getFullYear()}</div>
+        <div className="mt-2">
+          <a
+            href="https://github.com/Etashh/hue"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-black hover:underline"
+          >
+            View Source Code
+          </a>
+        </div>
       </footer>
     </div>
   );
