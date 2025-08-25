@@ -70,8 +70,9 @@ export default function Home() {
       const params = new URLSearchParams(searchParams);
       params.set("u", user);
       router.push(`?${params.toString()}`, { scroll: false });
-    } catch (e: any) {
-      setError(e.message || "Something went wrong");
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Something went wrong";
+      setError(errorMessage);
       setData(null);
     } finally {
       setLoading(false);
